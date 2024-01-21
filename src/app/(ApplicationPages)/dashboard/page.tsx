@@ -15,45 +15,14 @@ declare global {
 export default  function DashBoard(){
     const [isRunning,setIsRunning] =useState(false)
     console.log(typeof window)
-    // if(typeof window!='undefined'){
-        
-    //     const provider=new ethers.BrowserProvider(window.ethereum)
+    if(typeof window!='undefined'){
+        const provider=new ethers.BrowserProvider(window.ethereum)
+        console.log(provider)
+        if(isRunning){
+            loopThroughTokensandExchanges(provider,DummyData,Ethereum_Tokens);
+        }
+    }
 
-    //     console.log(DummyData)
-
-    //     //Loop chains
-    //     for (const [key, defiExchanges] of Object.entries(DummyData)) {
-    //         let pairPrice=0;
-    //         console.log('Chain : ',key)
-    //         //Loop tokens for each chain
-    //         for(let i=0;i<Ethereum_Tokens.length-1;i++){
-                
-    //             for(let j=i+1;j<Ethereum_Tokens.length;j++){
-
-    //                 console.log("Token pair : ",Ethereum_Tokens[i],Ethereum_Tokens[j])
-                    
-                    
-    //                 //Check pair prices across all exchanges
-    //                 for(const exchange of defiExchanges){
-
-    //                     console.log(exchange.name)
-    //                     const {ABI,contractFactoryAddress,getPairFunctionName,additionalParameters,tokenPairABI,tokenPoolPriceFunctionName,tokenPoolAdditionalParameters}=exchange;
-    //                     const exchangeContract=new ethers.Contract(contractFactoryAddress,ABI,provider)
-    //                     const pairAddress=await exchangeContract[getPairFunctionName](Ethereum_Tokens[i],Ethereum_Tokens[j]);
-    //                     console.log(pairAddress)
-        
-    //                     const pairContract= new ethers.Contract(pairAddress,tokenPairABI,provider);
-    //                     const result = await pairContract[tokenPoolPriceFunctionName]();
-    //                     pairPrice=result;
-    //                     console.log(result.toString())
-    //                 }
-    //             }
-    //         }
-    //     }  
-
-
-    //     console.log("After loop ends")
-    // }
 
     return(
         <main className=" min-h-screen flex flex-col justify-evenly text-white">
@@ -73,4 +42,46 @@ export default  function DashBoard(){
             </div>
         </main>
     )
+}
+
+
+async function loopThroughTokensandExchanges(provider:ethers.BrowserProvider,_exchangeList:typeof DummyData,_tokensList:string[]){
+        console.log("Starting loop through tokens")
+
+        //Loop chains
+        for (const [key, defiExchanges] of Object.entries(DummyData)) {
+            let token1Price;
+            let token2Price;
+            console.log('Chain : ',key)
+            //Loop tokens for each chain
+            for(let i=0;i<Ethereum_Tokens.length-1;i++){
+                
+                for(let j=i+1;j<Ethereum_Tokens.length;j++){
+
+                    console.log("Token pair : ",Ethereum_Tokens[i],Ethereum_Tokens[j])
+                    
+                    
+                    //Check pair prices across all exchanges
+                    for(const exchange of defiExchanges){
+
+                        console.log(exchange.name)
+                        const {factoryContractABI,factoryContractAddress,getPairFunction,additionalPairParameters,tokenPairContractABI,getTokenReservesFunction,additionalTokenResercesParameters}=exchange;
+                        const exchangeContract=new ethers.Contract(factoryContractAddress,factoryContractABI,provider)
+                        const pairAddress=await exchangeContract[getPairFunction](Ethereum_Tokens[i],Ethereum_Tokens[j]);
+                        console.log(pairAddress)
+        
+                        const pairContract= new ethers.Contract(pairAddress,tokenPairContractABI,provider);
+                        const result = await pairContract[getTokenReservesFunction](); //Will return array with BigInt values for each pair
+                        const [token1Reserves,token2Reserves,blockSamp]=result;
+                        token1Price=token1Reserves/token2Reserves; 
+                        token2Price=token2Reserves/token1Reserves;
+                        console.log(token1Reserves>token2Reserves,blockSamp);
+                        console.log(token1Price,token2Price,blockSamp)
+                    }
+                }
+            }
+        }  
+
+
+        console.log("After loop ends")
 }

@@ -20,13 +20,14 @@ import { useRouter } from "next/navigation"
 
 export const Exchange_Type=z.object({
     name:z.string({required_error:"required"}),
-    ABI:z.string({required_error:"required"}),
-    contractFactoryAddress:z.string().min(15,{message:"addresses have more than 15 length"}),
-    getPairFunctionName:z.string({required_error:"required"}),
-    additionalParameters:z.string().optional(),
+    factoryContractABI:z.string({required_error:"required"}),
+    factoryContractAddress:z.string().min(15,{message:"addresses have more than 15 length"}),
+    getPairFunction:z.string({required_error:"required"}),
+    additionalPairParameters:z.string().optional(),
     isActive:z.boolean().default(false),
-    tokenPairABI:z.string({required_error:"required"}),
-    tokenPoolPriceFunctionName:z.string({required_error:"required"}),
-    tokenPoolAdditionalParameters:z.string().optional(),
+    tokenPairContractABI:z.string({required_error:"required"}),
+    getTokenReservesFunction:z.string({required_error:"required"}),
+    additionalTokenResercesParameters:z.string().optional(),
+    chain:z.string({required_error:"required"}),
 })
 
