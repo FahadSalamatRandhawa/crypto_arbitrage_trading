@@ -6,22 +6,23 @@ import { relations } from "drizzle-orm";
 
 export const ExchangeTable = pgTable("exchange_table", {
     name: text("name").notNull(),
-    factoryContractAddress:text('factoryContractAddress').primaryKey().notNull(),
-    factoryContractABI: text("factoryContractABI").notNull(),
+    factoryContractAddress: text('factorycontractaddress').primaryKey().notNull(),
+    factoryContractABI: text('factorycontractabi').notNull(),
 
-    getPairFunction: text("getPairFunction").notNull(),
-    additionalPairParameters:text('additionalPairParameters').notNull(),
-    isActive: boolean("isActive").notNull(),
+    getPairFunction: text('getpairfunction').notNull(),
+    additionalPairParameters: text('additionalpairparameters').notNull(),
+    isActive: boolean('isactive').notNull(),
 
-    tokenPairContractABI: text("tokenPairContractABI").notNull(),
-    getTokenReservesFunction: text("getTokenReservesFunction").notNull(),
-    additionalTokenReserveParameters:text('additionalTokenReserveParameters').notNull(),
-    pairSwapFunction:text('pairSwapFunction').notNull(),
-    pairSwapAdditionalParameters:text('pairSwapAdditionalParameters').notNull(),
-    pairSwapFunctionSignature:text('pairSwapFunctionSignature').notNull(),
+    tokenPairContractABI: text('tokenpaircontractabi').notNull(),
+    getTokenReservesFunction: text('gettokenreservesfunction').notNull(),
+    additionalTokenReserveParameters: text('additionaltokenreserveparameters').notNull(),
+    pairSwapFunction: text('pairswapfunction').notNull(),
+    pairSwapAdditionalParameters: text('pairswapadditionalparameters').notNull(),
+    pairSwapFunctionSignature: text('pairswapfunctionsignature').notNull(),
 
     chain_id: integer("chain_id").notNull().references(()=>chainsTable.chainId),
 });
+
 
 export const Z_SELECT_ExchangeType = createSelectSchema(ExchangeTable);
 export const Z_INSERT_ExchangeType = createInsertSchema(ExchangeTable);

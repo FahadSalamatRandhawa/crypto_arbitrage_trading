@@ -102,49 +102,111 @@ export default  function DashBoard(){
 }
 
 
-async function loopThroughTokensandExchanges(provider:ethers.BrowserProvider,_exchangeList:typeof DummyData,_tokensList:string[]){
-        console.log("Starting loop through tokens")
+// async function loopThroughTokensandExchanges(provider:ethers.BrowserProvider,_exchangeList:typeof DummyData,_tokensList:string[]){
+//         console.log("Starting loop through tokens")
 
-        //Loop chains
-        for (const [key, defiExchanges] of Object.entries(DummyData)) {
-            let token1Price;
-            let token2Price;
-            console.log('Chain : ',key)
-            //Loop tokens for each chain
-            for(let i=0;i<Ethereum_Tokens.length-1;i++){
+//         //Loop chains
+//         for (const [key, defiExchanges] of Object.entries(DummyData)) {
+//             let token1Price;
+//             let token2Price;
+//             console.log('Chain : ',key)
+            
+//             //Loop tokens for each chain
+//             for(let i=0;i<Ethereum_Tokens.length-1;i++){
                 
-                for(let j=i+1;j<Ethereum_Tokens.length;j++){
+//                 for(let j=i+1;j<Ethereum_Tokens.length;j++){
 
-                    console.log("Token pair : ",Ethereum_Tokens[i],Ethereum_Tokens[j])
+//                     console.log("Token pair : ",Ethereum_Tokens[i],Ethereum_Tokens[j])
                     
                     
-                    //Check pair prices across all exchanges
-                    for(const exchange of defiExchanges){
+//                     //Check pair prices across all exchanges
+//                     for(const exchange of defiExchanges){
 
-                        console.log(exchange.name)
-                        const {factoryContractABI,factoryContractAddress,getPairFunction,additionalPairParameters,tokenPairContractABI,getTokenReservesFunction,additionalTokenReserveParameters}=exchange;
-                        const exchangeContract=new ethers.Contract(factoryContractAddress,factoryContractABI,provider)
-                        const pairAddress=await exchangeContract[getPairFunction](Ethereum_Tokens[i],Ethereum_Tokens[j]);
+//                         console.log(exchange.name)
+//                         const {factoryContractABI,factoryContractAddress,getPairFunction,additionalPairParameters,tokenPairContractABI,getTokenReservesFunction,additionalTokenReserveParameters}=exchange;
+//                         const exchangeContract=new ethers.Contract(factoryContractAddress,factoryContractABI,provider)
+//                         const pairAddress=await exchangeContract[getPairFunction](Ethereum_Tokens[i],Ethereum_Tokens[j]);
                         
                         
-                        //Pair functions
-                        const pairContract= new ethers.Contract(pairAddress,tokenPairContractABI,provider);
+//                         //Pair functions
+//                         const pairContract= new ethers.Contract(pairAddress,tokenPairContractABI,provider);
                         
-                        const name=await pairContract.name();
-                        const result = await pairContract[getTokenReservesFunction](); //Will return array with BigInt values for each pair
+//                         const name=await pairContract.name();
+//                         const result = await pairContract[getTokenReservesFunction](); //Will return array with BigInt values for each pair
                         
                         
-                        const [token1Reserves,token2Reserves,blockSamp]=result;
-                        token1Price=Big(token1Reserves.toString()).div(token2Reserves.toString()).toString(); 
-                        token2Price=Big(token2Reserves.toString()).div(token1Reserves.toString()).toString();
+//                         const [token1Reserves,token2Reserves,blockSamp]=result;
+//                         token1Price=Big(token1Reserves.toString()).div(token2Reserves.toString()).toString(); 
+//                         token2Price=Big(token2Reserves.toString()).div(token1Reserves.toString()).toString();
                         
-                        console.log(name," : ",pairAddress)
-                        console.log("Prices \n",token1Price,token2Price,blockSamp)
-                    }
-                }
-            }
-        }  
+//                         console.log(name," : ",pairAddress)
+//                         console.log("Prices \n",token1Price,token2Price,blockSamp)
+//                     }
+//                 }
+//             }
+//         }  
 
 
-        console.log("After loop ends")
+//         console.log("After loop ends")
+// }
+
+
+async function loopThroughTokensandExchanges(provider:ethers.BrowserProvider,_exchangeList:typeof DummyData,_tokensList:string[]){
+  console.log("Starting loop through tokens")
+
+  //Loop chains
+  for (const [key, defiExchanges] of Object.entries(DummyData)) {
+      let token1Price;
+      let token2Price;
+      console.log('Chain : ',key)
+
+      const functionSignature = 'getPair(address,address)';
+      const functionSelector = ethers.id(functionSignature).slice(0, 10);
+      
+
+      
+      //Loop tokens for each chain
+      for(let i=0;i<Ethereum_Tokens.length-1;i++){
+          
+          for(let j=i+1;j<Ethereum_Tokens.length;j++){
+
+              console.log("Token pair : ",Ethereum_Tokens[i],Ethereum_Tokens[j])
+              
+              
+              //Check pair prices across all exchanges
+              for(const exchange of defiExchanges){
+
+                  console.log(exchange.name)
+                  const {factoryContractABI,factoryContractAddress,getPairFunction,additionalPairParameters,tokenPairContractABI,getTokenReservesFunction,additionalTokenReserveParameters}=exchange;
+                  const exchangeContract=new ethers.Contract(factoryContractAddress,[],provider)
+                  const encoder=await ethers.AbiCoder.defaultAbiCoder()
+                  const encodedParameters = encoder.encode(['address', 'address'], [Ethereum_Tokens[i], Ethereum_Tokens[j]]);
+
+                // Combine the function selector and the encoded parameters
+                const data = functionSelector + encodedParameters.slice(2);
+                const pairAddress = await provider.call({ to: factoryContractAddress, data: data });
+                console.log(pairAddress)
+                const checksummedAddress = ethers.getAddress(ethers.stripZerosLeft(pairAddress));
+                console.log(checksummedAddress)
+                  
+                  //Pair functions
+                  const pairContract= new ethers.Contract(pairAddress,tokenPairContractABI,provider);
+                  
+                  const name=await pairContract.name();
+                  const result = await pairContract[getTokenReservesFunction](); //Will return array with BigInt values for each pair
+                  
+                  
+                  const [token1Reserves,token2Reserves,blockSamp]=result;
+                  token1Price=Big(token1Reserves.toString()).div(token2Reserves.toString()).toString(); 
+                  token2Price=Big(token2Reserves.toString()).div(token1Reserves.toString()).toString();
+                  
+                  console.log(name," : ",pairAddress)
+                  console.log("Prices \n",token1Price,token2Price,blockSamp)
+              }
+          }
+      }
+  }  
+
+
+  console.log("After loop ends")
 }

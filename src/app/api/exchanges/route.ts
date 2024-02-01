@@ -8,9 +8,11 @@ export async function GET(){
     console.log("Exchanges GET API")
     try{
         const Exchanges=await db.select().from(ExchangeTable);
+        console.log(Exchanges)
 
         return NextResponse.json({success:true,message:"Exchanges fetched",data:Exchanges})
     }catch(err){
+        console.log(err)
         return NextResponse.json({success:false,message:"Faced an error while fetching"},{status:500})
     }
 }
