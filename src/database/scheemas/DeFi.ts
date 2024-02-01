@@ -1,11 +1,13 @@
 import { serial, text, pgTable, pgSchema, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
+import { chainsTable } from "./chains";
 
-const DefiTable=pgTable("tokens_table",{
+export const DefiTable=pgTable("defi_table",{
     serial:serial("serial"),
-    contract_address:text("contract_address").primaryKey(),
     name:text("name").notNull(),
-    isActive:boolean("is_active").default(true)
+    contract_address:text("contract_address").primaryKey(),
+    isActive:boolean("is_active").default(true),
+    chain:text('chain').notNull().references(()=>chainsTable.name),
 })
 
 export const INSERT_DefiType=createInsertSchema(DefiTable);

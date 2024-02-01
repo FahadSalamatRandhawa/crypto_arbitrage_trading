@@ -1,0 +1,259 @@
+{
+  "id": "2b538895-bcc2-45af-8255-391a710abbc2",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "chains": {
+      "name": "chains",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "tokens_table": {
+      "name": "tokens_table",
+      "schema": "",
+      "columns": {
+        "#": {
+          "name": "#",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "address": {
+          "name": "address",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "symbol": {
+          "name": "symbol",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "currencyType": {
+          "name": "currencyType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chain": {
+          "name": "chain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tokens_table_chain_chains_name_fk": {
+          "name": "tokens_table_chain_chains_name_fk",
+          "tableFrom": "tokens_table",
+          "tableTo": "chains",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "chain"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "tokens_table_address_unique": {
+          "name": "tokens_table_address_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "address"
+          ]
+        }
+      }
+    },
+    "exchange_table": {
+      "name": "exchange_table",
+      "schema": "",
+      "columns": {
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "factoryContractAddress": {
+          "name": "factoryContractAddress",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "factoryContractABI": {
+          "name": "factoryContractABI",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "getPairFunction": {
+          "name": "getPairFunction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "additionalPairParameters": {
+          "name": "additionalPairParameters",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isActive": {
+          "name": "isActive",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "tokenPairContractABI": {
+          "name": "tokenPairContractABI",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "getTokenReservesFunction": {
+          "name": "getTokenReservesFunction",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "additionalTokenReserveParameters": {
+          "name": "additionalTokenReserveParameters",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "chain": {
+          "name": "chain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "exchange_table_chain_chains_name_fk": {
+          "name": "exchange_table_chain_chains_name_fk",
+          "tableFrom": "exchange_table",
+          "tableTo": "chains",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "chain"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "defi_table": {
+      "name": "defi_table",
+      "schema": "",
+      "columns": {
+        "serial": {
+          "name": "serial",
+          "type": "serial",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contract_address": {
+          "name": "contract_address",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "chain": {
+          "name": "chain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "defi_table_chain_chains_name_fk": {
+          "name": "defi_table_chain_chains_name_fk",
+          "tableFrom": "defi_table",
+          "tableTo": "chains",
+          "schemaTo": "public",
+          "columnsFrom": [
+            "chain"
+          ],
+          "columnsTo": [
+            "name"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

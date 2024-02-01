@@ -1,6 +1,7 @@
 import { serial, text, pgTable, pgSchema, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import * as z from 'zod'
+import { chainsTable } from "./chains";
 
 export const TokensTable=pgTable("tokens_table",{
     '#':serial("#"),
@@ -8,7 +9,8 @@ export const TokensTable=pgTable("tokens_table",{
     name:text("name").notNull(),
     symbol:text("symbol").notNull(),
     isActive:boolean("isActive").notNull(),
-    currencyType:text("currencyType").notNull()
+    currencyType:text("currencyType").notNull(),
+    chain:text("chain").notNull().references(()=>chainsTable.name),
 })
 
 // export type INSERT_TokenType= InferInsertModel<typeof TokensTable>

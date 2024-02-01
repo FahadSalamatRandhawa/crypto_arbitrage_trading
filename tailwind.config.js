@@ -9,22 +9,26 @@ module.exports = {
   ],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "md": "800px",
-        "lg":"1180px",
-        "xl":"1920px"
-      },
-    },
     extend: {
+      container: {
+        center: true,
+        padding: "2rem",
+        screens: {
+          "md": "800px",
+          "lg":"1180px",
+          "xl":"1920px"
+        },
+      },
       colors:{
         'light_transparent':"#AAD7D9",
         'sea_water':"#52D3D8",
         'dim_blue':"#3887BE",
         'darkish_blue':"#38419D",
-        'lime-egg':"#E5E5E5"
+        'lime-egg':"#E5E5E5",
+        'primary':'#176B87',
+        'secondary':'#86B6F6',
+        'tertiary':'#B4D4FF',
+        'card':'#EEF5FF'
       },
       keyframes: {
         "accordion-down": {
