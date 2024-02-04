@@ -15,34 +15,38 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Button } from "@/components/ui/button"
-import { Type_INSERT_ChainType } from "@/database/scheemas/chains";
+import { Type_INSERT_ChainType, Type_SELECT_ChainType, Z_INSERT_ChainType } from "@/database/scheemas/chains";
 import { useToast } from "../ui/use-toast"
 import { Toaster } from "@/components/ui/toaster"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 
-const ChainType=z.object({
-    chainId:z.string({required_error:"required"}).transform((d)=>parseInt(d)),
-    name:z.string({required_error:"required"}),
-    type:z.string({required_error:"required"}),
-})
+// const ChainType=z.object({
+//     chainId:z.string({required_error:"required"}).transform((d)=>parseInt(d)),
+//     name:z.string({required_error:"required"}),
+//     type:z.string({required_error:"required"}),
+// })
 
-export function AddChain({default_value,className}:{default_value?:Type_INSERT_ChainType,className?:string}){
+export function AddChain({default_value,className}:{default_value?:Type_SELECT_ChainType,className?:string}){
     const [isLoading,setIsLoading]=useState(false)
     const router=useRouter()
-    const form=useForm<z.infer<typeof ChainType>>({resolver:zodResolver(ChainType),defaultValues:default_value})
+    const form=useForm<z.infer<typeof Z_INSERT_ChainType>>({resolver:zodResolver(Z_INSERT_ChainType),defaultValues:default_value})
     const {toast}=useToast()
-    async function InsertChain(data:z.infer<typeof ChainType>){
+    async function InsertChain(data:z.infer<typeof Z_INSERT_ChainType>){
         console.log("Inserting chain",data)
         try{
             setIsLoading(true)
             const result:any=await fetch('http://localhost:3000/api/chains',{method:default_value?'PUT':'POST',cache:"no-cache",body:JSON.stringify(data)})
             const resultData=await result.json()
+            console.log(resultData)
+            console.log(result)
             if(result.ok){
+                console.log("response ok")
                 toast({title:"Success",description:resultData.message})
                 router.refresh()
             }else{
+                console.log("response not ok")
                 toast({title:"Failure",description:resultData.message})
             }
         }catch(err){
@@ -67,19 +71,42 @@ export function AddChain({default_value,className}:{default_value?:Type_INSERT_C
                 )} />
                 <FormField control={form.control} name="name" render={({field})=>(
                     <FormItem>
-                        <FormLabel>Chain</FormLabel>
+                        <FormLabel>Name</FormLabel>
                         <FormControl>
                             <Input className="w-full bg-transparent " {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
                 )} />
-                <FormField control={form.control} name="type" render={({field})=>(
+                <div className="flex justify-between ">
+                    <FormField control={form.control} name="type" render={({field})=>(
+                        <FormItem>
+                            <FormLabel>Type</FormLabel>
+                            <FormControl>
+                                <Input className=" w-full bg-transparent " {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+                    <FormField control={form.control} name="isActive" render={({field})=>(
+                        <FormItem className="grid h-full self-end mt-[3px] mr-[10px]">
+                            <FormLabel>Active</FormLabel>
+                            <FormControl>
+                                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )} />
+                </div>
+                <FormField control={form.control} name="rpcurl" render={({field})=>(
                     <FormItem>
-                        <FormLabel>Type</FormLabel>
+                        <FormLabel>Rpc url</FormLabel>
                         <FormControl>
                             <Input className=" w-full bg-transparent " {...field} />
                         </FormControl>
+                        <FormDescription>
+                            you can get a url from private providers or from <code>https://chainlist.org/</code>
+                        </FormDescription>
                         <FormMessage />
                     </FormItem>
                 )} />

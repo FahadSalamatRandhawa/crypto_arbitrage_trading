@@ -58,9 +58,9 @@ export function ExchangeCard({data}:{data:Type_INSERT_ExchangeType}) {
 
   return (
     <>
-    <div className="flex w-full flex-col items-start justify-between rounded-md border px-4 py-3 sm:flex-row sm:items-center">
+    <div className=" min-h-[100px] w-full flex flex-col items-start justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
       <p className="text-sm font-medium leading-none">
-        <span className=" min-w-[100px] mr-2 rounded-lg bg-primary px-2 py-1 text-xs text-primary-foreground">
+        <span className=" min-w-[100px] mr-2 text-lime-egg rounded-lg px-2 py-1 text-xs text-primary-foreground">
           {data.chain_id}
         </span>
         <span className="text-muted-foreground">{data.name}</span>
@@ -85,7 +85,7 @@ export function ExchangeCard({data}:{data:Type_INSERT_ExchangeType}) {
 
       <Dialog open={update} onOpenChange={()=>setUpdate(false)} >
         <DialogTrigger className="invisible hidden">Open Sim Sim</DialogTrigger>
-          <DialogContent className="max-w-none p-0">
+          <DialogContent className="max-w-none p-0 w-full md:w-[80%] lg:w-[40%]">
               <AddExchangeForm default_value={data} className=" text-black" />
           </DialogContent>
       </Dialog>

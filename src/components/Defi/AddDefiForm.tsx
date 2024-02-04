@@ -31,6 +31,7 @@ import {
   } from "@/components/ui/select"
 import { useState } from "react"
 import { useToast } from "../ui/use-toast"
+import { Type_INSERT_DefiType, Type_SELECT_DefiType, Z_INSERT_DefiType, Z_SELECT_DefiType } from "@/database/scheemas/DeFi"
 
 export const TokenType=z.object({
     name:z.string({required_error:"required"}),
@@ -43,20 +44,20 @@ export const TokenType=z.object({
 const default_Token_Value:Type_INSERT_TokenType={name:"Ethereum",address:"1234456awdnabdsa",isActive:false,symbol:"ETH",currencyType:"",chain:"ethereum"}
 
 
-export const TokenAddForm=({default_value,className}:{default_value?:Type_SELECT_TokenType,className:string})=>{
+export const AddDefiForm=({default_value,className}:{default_value?:Type_SELECT_DefiType,className:string})=>{
     const router=useRouter()
     const [loading,setLoading]=useState(false)
     const {toast}=useToast()
 
     const {data,error,isLoading}=useSWR("/api/chains",fetchChains)
 
-    const form=useForm<z.infer<typeof TokenType>>({resolver:zodResolver(default_value?Z_SELECT_TokenType:TokenType),defaultValues:default_value?default_value:default_Token_Value})
+    const form=useForm<Type_INSERT_DefiType>({resolver:zodResolver(default_value?Z_SELECT_DefiType:Z_INSERT_DefiType),defaultValues:default_value})
 
-    async function AddTokenHandler(data:z.infer<typeof TokenType>){
+    async function AddDefiHandler(data:Type_INSERT_DefiType){
         console.log("tokenform api handler")
         console.log(data)
         try{
-            const apiCall=await fetch("/api/tokens",{method:default_value?"PUT":"POST",body:JSON.stringify(data)})
+            const apiCall=await fetch("/api/defi",{method:default_value?"PUT":"POST",body:JSON.stringify(data)})
             const jsonResponse=await apiCall.json()
             console.log(jsonResponse)
             if(apiCall.ok){
@@ -71,7 +72,7 @@ export const TokenAddForm=({default_value,className}:{default_value?:Type_SELECT
         }
     }
 
-    async function deleteToken({id}:{id:number}){
+    async function deleteDefi({id}:{id:number}){
         try{
             const requestdeleteChain=await fetch(baseURL+"/api/tokens",{method:"DELETE",cache:"no-cache",body:JSON.stringify({id})})
             const deletedChain=await requestdeleteChain.json();
@@ -89,7 +90,7 @@ export const TokenAddForm=({default_value,className}:{default_value?:Type_SELECT
     
     return (
         <Form {...form} >
-            <form  onSubmit={form.handleSubmit(AddTokenHandler)} className={" grid grid-cols-1 md:grid-cols-3 place-content-end justify-between gap-[20px] p-3 "+className}>
+            <form  onSubmit={form.handleSubmit(AddDefiHandler)} className={" grid grid-cols-1 place-content-end justify-between gap-[20px] p-3 "+className}>
                 <FormField control={form.control} name="name" render={({field})=>(
                     <FormItem>
                         <FormLabel>Name</FormLabel>
@@ -119,19 +120,28 @@ export const TokenAddForm=({default_value,className}:{default_value?:Type_SELECT
                         <FormMessage />
                     </FormItem>
                 )} />
-                <FormField control={form.control} name="symbol" render={({field})=>(
-                    <FormItem className=" w-min justify-self-end">
-                        <FormLabel>Symbol</FormLabel>
+                <FormField control={form.control} name="contractAddress" render={({field})=>(
+                    <FormItem className=" ">
+                        <FormLabel>Contract Address</FormLabel>
                         <FormControl>
-                            <Input className=" w-[100px] bg-transparent " {...field} />
+                            <Input className="  bg-transparent " {...field} />
                         </FormControl>
                         <FormMessage/>
                     </FormItem>
                 )} />
+                <FormField control={form.control} name="isActive" render={({field})=>(
+                    <FormItem className=" w-min  justify-self-end" >
+                    <FormLabel>Active</FormLabel>
+                    <FormControl>
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage/>
+                    </FormItem>
+                )} />
 
-                <FormField control={form.control} name="address" render={({field})=>(
+                <FormField control={form.control} name="loanFunctionSignature" render={({field})=>(
                     <FormItem className=" md:col-span-2 ">
-                        <FormLabel>Address</FormLabel>
+                        <FormLabel>Function Signature</FormLabel>
                         <FormControl>
                             <Input className=" w-full bg-transparent " {...field} />
                         </FormControl>
@@ -141,31 +151,12 @@ export const TokenAddForm=({default_value,className}:{default_value?:Type_SELECT
                 
                 
                 
-                <FormField control={form.control} name="currencyType" render={({field})=>(
-                    <FormItem className=" w-min justify-self-end">
-                        <FormLabel>Token type</FormLabel>
-                        <FormControl>
-                            <Input type="text" className=" w-[100px] bg-transparent " {...field} />
-                        </FormControl>
-                        <FormMessage/>
-                    </FormItem>
-                )} />
-                
                 
                 <Button disabled={loading} type="submit" className={!default_value?"md:col-span-2 self-end  ":"self-end "} >{default_value?"Update":"Add"}</Button>
                 {
-                    default_value&&<Button onClick={()=>deleteToken({id:default_value["#"]})} disabled={loading}  type="button" className="self-end " variant={"destructive"} >{"Delete"}</Button>
+                    default_value&&<Button onClick={()=>deleteDefi({id:default_value.serial})} disabled={loading}  type="button" className="self-end " variant={"destructive"} >{"Delete"}</Button>
                 }
 
-                <FormField control={form.control} name="isActive" render={({field})=>(
-                    <FormItem className=" w-min  justify-self-end" >
-                        <FormLabel>Active</FormLabel>
-                        <FormControl>
-                            <Switch checked={field.value} onCheckedChange={field.onChange} />
-                        </FormControl>
-                        <FormMessage/>
-                    </FormItem>
-                )} />
             </form>
         </Form>
     )

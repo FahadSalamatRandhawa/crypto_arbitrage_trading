@@ -4,9 +4,11 @@ import * as z from 'zod'
 
 
 export const chainsTable=pgTable("chains",{
-    chainId:integer('chainid').primaryKey().unique().notNull(),
+    chainId:text('chainid').primaryKey().unique().notNull(),
     name:text("name").notNull().unique(),
     type:text("type").notNull(),
+    rpcurl:text('rpcurl').notNull(),
+    isActive:boolean('isactive').default(false).notNull()
 })
 
 

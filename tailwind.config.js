@@ -25,7 +25,7 @@ module.exports = {
         'dim_blue':"#3887BE",
         'darkish_blue':"#38419D",
         'lime-egg':"#E5E5E5",
-        'primary':'#176B87',
+        'primary':'#56667F',
         'secondary':'#86B6F6',
         'tertiary':'#B4D4FF',
         'card':'#EEF5FF'

@@ -7,20 +7,18 @@ import { relations } from "drizzle-orm";
 export const ExchangeTable = pgTable("exchange_table", {
     name: text("name").notNull(),
     factoryContractAddress: text('factorycontractaddress').primaryKey().notNull(),
-    factoryContractABI: text('factorycontractabi').notNull(),
-
-    getPairFunction: text('getpairfunction').notNull(),
+    getPairsFunctionSignature: text('factorypairsfunctionsignature').notNull(),
     additionalPairParameters: text('additionalpairparameters').notNull(),
+
     isActive: boolean('isactive').notNull(),
 
-    tokenPairContractABI: text('tokenpaircontractabi').notNull(),
-    getTokenReservesFunction: text('gettokenreservesfunction').notNull(),
+    getTokenReservesFunctionSignature: text('gettokenreservesfunctionsignature').notNull(),
     additionalTokenReserveParameters: text('additionaltokenreserveparameters').notNull(),
-    pairSwapFunction: text('pairswapfunction').notNull(),
-    pairSwapAdditionalParameters: text('pairswapadditionalparameters').notNull(),
-    pairSwapFunctionSignature: text('pairswapfunctionsignature').notNull(),
 
-    chain_id: integer("chain_id").notNull().references(()=>chainsTable.chainId),
+    pairSwapFunctionSignature: text('pairswapfunctionsignature').notNull(),
+    pairSwapAdditionalParameters: text('pairswapadditionalparameters').notNull(),
+
+    chain_id: text("chain_id").notNull().references(()=>chainsTable.chainId),
 });
 
 

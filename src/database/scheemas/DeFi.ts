@@ -1,14 +1,19 @@
 import { serial, text, pgTable, pgSchema, boolean } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema } from 'drizzle-typebox';
+import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { chainsTable } from "./chains";
+import * as z from 'zod'
 
-export const DefiTable=pgTable("defi_table",{
+export const DefiTable=pgTable("defi",{
     serial:serial("serial"),
     name:text("name").notNull(),
-    contract_address:text("contract_address").primaryKey(),
-    isActive:boolean("is_active").default(true),
-    chain:text('chain').notNull().references(()=>chainsTable.name),
+    contractAddress:text("contractaddress").primaryKey().unique(),
+    loanFunctionSignature:text('loanfunctionsignature').notNull(),
+    isActive:boolean("isactive").default(true).notNull(),
+    chain:text('chain').notNull().references(()=>chainsTable.chainId),
 })
 
-export const INSERT_DefiType=createInsertSchema(DefiTable);
-export const SELECT_DefiType=createSelectSchema(DefiTable)
+export const Z_INSERT_DefiType=createInsertSchema(DefiTable);
+export const Z_SELECT_DefiType=createSelectSchema(DefiTable)
+
+export type Type_INSERT_DefiType=z.infer<typeof Z_INSERT_DefiType>
+export type Type_SELECT_DefiType=z.infer<typeof Z_SELECT_DefiType>

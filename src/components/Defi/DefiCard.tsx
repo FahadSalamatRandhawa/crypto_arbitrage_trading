@@ -16,7 +16,6 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Type_INSERT_ChainType, Type_SELECT_ChainType } from "@/database/scheemas/chains"
 
 import {
   Dialog,
@@ -32,17 +31,19 @@ import { useToast } from "../ui/use-toast"
 import { baseURL } from "@/utils"
 import { useRouter } from "next/navigation"
 import { Toaster } from "../ui/toaster"
+import { AddDefiForm } from "./AddDefiForm"
+import { Type_INSERT_DefiType, Type_SELECT_DefiType } from "@/database/scheemas/DeFi"
 
-export function ChainCard({data}:{data:Type_SELECT_ChainType}) {
+export function DefiCard({data}:{data:Type_SELECT_DefiType}) {
   const [open, setOpen] = React.useState(false)
   const [update,setUpdate]=React.useState(false)
   const {toast}=useToast()
 
   const router=useRouter()
 
-  async function deleteChain({chainId}:{chainId:string}){
+  async function deleteExchange({serial}:{serial:number}){
     try{
-        const requestdeleteChain=await fetch(baseURL+"/api/chains",{method:"DELETE",cache:"no-cache",body:JSON.stringify({chainId})})
+        const requestdeleteChain=await fetch(baseURL+"/api/defi",{method:"DELETE",cache:"no-cache",body:JSON.stringify({serial})})
         const deletedChain=await requestdeleteChain.json();
     if(requestdeleteChain.ok){
         toast({title:"Success",description:deletedChain.message})
@@ -57,10 +58,10 @@ export function ChainCard({data}:{data:Type_SELECT_ChainType}) {
 
   return (
     <>
-    <div className=" min-h-[80px] flex w-full flex-col items-start justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
+    <div className=" min-h-[100px] w-full flex flex-col items-start justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
       <p className="text-sm font-medium leading-none">
-        <span className=" min-w-[100px] mr-2 rounded-lg text-lime-egg bg-primary px-2 py-1 text-xs text-primary-foreground">
-          {data.chainId}
+        <span className=" min-w-[100px] mr-2 text-lime-egg rounded-lg px-2 py-1 text-xs text-primary-foreground">
+          {data.serial}
         </span>
         <span className="text-muted-foreground">{data.name}</span>
       </p>
@@ -74,7 +75,7 @@ export function ChainCard({data}:{data:Type_SELECT_ChainType}) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={()=>setUpdate(true)} >Update</DropdownMenuItem>            
-            <DropdownMenuItem onClick={()=>deleteChain({chainId:data.chainId})} className="text-red-600">
+            <DropdownMenuItem onClick={()=>deleteExchange({serial:data.serial})} className="text-red-600">
               Delete
               <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
             </DropdownMenuItem>
@@ -84,8 +85,8 @@ export function ChainCard({data}:{data:Type_SELECT_ChainType}) {
 
       <Dialog open={update} onOpenChange={()=>setUpdate(false)} >
         <DialogTrigger className="invisible hidden">Open Sim Sim</DialogTrigger>
-          <DialogContent className=" p-0">
-              <AddChain default_value={data} className=" text-black" />
+          <DialogContent className="max-w-none p-0 w-full md:w-[80%] lg:w-[40%]">
+              <AddDefiForm default_value={data} className=" text-black" />
           </DialogContent>
       </Dialog>
     </div>
