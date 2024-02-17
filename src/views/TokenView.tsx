@@ -26,11 +26,11 @@ export default function TokensView(){
 
     return (
         <>
-            <div className=" flex flex-col justify-between p1 md:p-5 ">
-                <div className=" flex flex-col md:flex-row justify-between">
-                    <div className="w-full h-auto md:w-[300px] lg:w-[400px] xl:w-[500px] flex flex-col gap-[5px] md:gap-[10px] xl:gap-[20px]">
+            <div className=" flex flex-col justify-between p-2 md:p-5 ">
+                <div className=" flex flex-col lg:flex-row justify-between">
+                    <div className=" h-auto min-w-[300px] w-[60%] md:w-[400px] xl:w-[500px] flex flex-col gap-[5px] md:gap-[10px] xl:gap-[20px]">
                         <Dialog>
-                            <DialogTrigger className="w-full md:w-[200px] p-2 rounded-md text-center border border-primary bg-primary/60 text-white hover:bg-lime-egg hover:text-black self-end">Add new</DialogTrigger>
+                            <DialogTrigger className="w-full md:w-[200px] p-2 rounded-md text-center border bg-button hover:bg-button/80 text-white self-end">Add new</DialogTrigger>
                             <DialogContent className=" overflow-scroll max-w-none p-0 w-full md:w-[500px] lg:w-[600px]">
                                 <TokenAddForm className=" text-black" />
                             </DialogContent>

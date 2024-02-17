@@ -1,4 +1,4 @@
-import { serial, text, pgTable, pgSchema, boolean } from "drizzle-orm/pg-core";
+import { serial, text, pgTable, pgSchema, boolean, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
 import { chainsTable } from "./chains";
 import * as z from 'zod'
@@ -10,6 +10,7 @@ export const DefiTable=pgTable("defi",{
     loanFunctionSignature:text('loanfunctionsignature').notNull(),
     isActive:boolean("isactive").default(true).notNull(),
     chain:text('chain').notNull().references(()=>chainsTable.chainId),
+    fee:integer("fee").notNull().default(0)
 })
 
 export const Z_INSERT_DefiType=createInsertSchema(DefiTable);

@@ -9,15 +9,16 @@ module.exports = {
   ],
   prefix: "",
   theme: {
+    screens: {
+      "md": "800px",
+      "lg":"1180px",
+      "xl":"1920px"
+    },
     extend: {
       container: {
         center: true,
         padding: "2rem",
-        screens: {
-          "md": "800px",
-          "lg":"1180px",
-          "xl":"1920px"
-        },
+        
       },
       colors:{
         'light_transparent':"#AAD7D9",
@@ -25,10 +26,11 @@ module.exports = {
         'dim_blue':"#3887BE",
         'darkish_blue':"#38419D",
         'lime-egg':"#E5E5E5",
-        'primary':'#56667F',
+        'primary':'#f4c888',
         'secondary':'#86B6F6',
         'tertiary':'#B4D4FF',
-        'card':'#EEF5FF'
+        'card':'#EEF5FF',
+        "button":"#fd6f00",
       },
       keyframes: {
         "accordion-down": {

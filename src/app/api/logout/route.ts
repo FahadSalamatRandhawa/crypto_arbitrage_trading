@@ -11,25 +11,28 @@ export async function POST(req:NextRequest,response:NextResponse){
 
         const cookieStore = cookies()
         const JWT=cookieStore.has("JWT")
-       
-            const JWT_Token=cookieStore.get("JWT")?.value;
-            //console.log("Fetched JWT for matching", JWT_Token)
-            const secret=new TextEncoder().encode(process.env.SECRET)
-            const verified=JWT && await jose.jwtVerify(JWT_Token!,secret)
-            if(verified){
-                //console.log("Inside verified")
-                return NextResponse.next();
-            }
 
-        response.cookies.delete("JWT")
+        
+        if(JWT){
+            const JWT_Token=cookieStore.get("JWT")?.value;
+            console.log("JWT ", JWT_Token)  
+            response.cookies.delete("JWT")
+        }
+
+        console.log("Logging out")
         response=NextResponse.redirect(new URL("/",req.url)) ; 
         
         return response
        
     }catch(e:unknown){
         console.log("in error")
+        console.log(e)
         const response=NextResponse.redirect(new URL("/",req.url));
-        response.cookies.delete("JWT")
+        const cookieStore = cookies()
+        const JWT=cookieStore.has("JWT")
+        if(JWT){
+            response.cookies.delete("JWT")
+        }
         return response
     }
 }

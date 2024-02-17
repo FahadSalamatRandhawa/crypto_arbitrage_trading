@@ -58,9 +58,9 @@ export function DefiCard({data}:{data:Type_SELECT_DefiType}) {
 
   return (
     <>
-    <div className=" min-h-[100px] w-full flex flex-col items-start justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
+    <div className=" min-h-[100px] w-full flex items-center justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
       <p className="text-sm font-medium leading-none">
-        <span className=" min-w-[100px] mr-2 text-lime-egg rounded-lg px-2 py-1 text-xs text-primary-foreground">
+        <span className=" min-w-[100px] mr-2 text-lime-egg bg-button rounded-lg px-2 py-1 text-xs text-primary-foreground">
           {data.serial}
         </span>
         <span className="text-muted-foreground">{data.name}</span>

@@ -58,10 +58,10 @@ export const LoginPage=()=>{
 
     return(
     <div>
-        <div className=" flex flex-col bg-gradient-to-tr from-orange-400 to-fuchsia-600 h-screen items-center p-5 text-white gap-[40%] ">
+        <div className=" flex flex-col bg-gradient-to-tr  h-screen items-center p-5 text-white gap-[40%] ">
         <Popover>
-            <PopoverTrigger className=" self-start rounded-xl border p-3 animate-wiggle ">Login Here</PopoverTrigger>
-            <PopoverContent className=" bg-opacity-20 text-white placeholder:text-white/20 w-screen md:min-w-[400px] md:w-auto ">
+            <PopoverTrigger className=" self-start rounded-xl border bg-button p-3 animate-wiggle ">Login Here</PopoverTrigger>
+            <PopoverContent className="  text-black/80 bg-white/80 placeholder:text-white/20 w-screen md:min-w-[400px] md:w-auto ">
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(handleSubmit)} >
                         <FormField control={form.control} name="username" render={({field})=>(

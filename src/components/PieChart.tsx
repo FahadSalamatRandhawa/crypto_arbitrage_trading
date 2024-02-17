@@ -13,8 +13,8 @@ export function PieChartComponent({chartdata}:{chartdata:any[]}){
             label: 'Active vs Inactive',
             data: [chartdata.filter((i)=>i.isActive!=true).length,chartdata.filter((i)=>i.isActive).length],
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 99, 132, 0.5)',
+              'rgba(54, 182, 235, 0.5)',
             ],
             borderColor: [
               'rgba(255, 99, 132, 1)',

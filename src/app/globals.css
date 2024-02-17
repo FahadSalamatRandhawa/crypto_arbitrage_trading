@@ -20,10 +20,19 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  
 }
+
 
 a{
   font-size: large;
   font-weight: 500;
+  border-bottom:2px white solid;
+}
+
+a:hover{
+  font-size: large;
+  font-weight: 500;
+  border-bottom:2px orange solid;
+  animation-duration: 500ms;
+  animation-fill-mode: forwards;
 }

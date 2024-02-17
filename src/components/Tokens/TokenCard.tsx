@@ -60,9 +60,9 @@ export function TokenCard({data}:{data:Type_SELECT_TokenType}) {
 
   return (
     <>
-    <div className=" min-h-[80px] flex w-full flex-col items-start justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
+    <div className=" min-h-[80px] flex w-full items-center justify-between rounded-md border border-black/30 hover:bg-primary/30 px-4 py-3 sm:flex-row sm:items-center">
       <p className="text-sm font-medium leading-none">
-        <span className=" min-w-[100px] mr-2 rounded-lg text-lime-egg bg-primary px-2 py-1 text-xs text-primary-foreground">
+        <span className=" min-w-[100px] mr-2 rounded-lg text-lime-egg bg-button px-2 py-1 text-xs text-primary-foreground">
           {data.symbol}
         </span>
         <span className="text-muted-foreground">{data.name}</span>
@@ -92,7 +92,6 @@ export function TokenCard({data}:{data:Type_SELECT_TokenType}) {
           </DialogContent>
       </Dialog>
     </div>
-    <Toaster />
     </>
   )
 }

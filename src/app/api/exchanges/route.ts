@@ -50,9 +50,9 @@ export async function PUT(request:NextRequest){
 export async function DELETE(request:NextRequest){
     console.log("Exchanges DELETE API")
     try{
-        const {factoryContractAddress}=await request.json();
-        console.log(factoryContractAddress);
-        const deleteExchange=await db.delete(ExchangeTable).where(eq(ExchangeTable.factoryContractAddress,factoryContractAddress)).returning();
+        const {factoryAddress}=await request.json();
+        console.log(factoryAddress);
+        const deleteExchange=await db.delete(ExchangeTable).where(eq(ExchangeTable.factoryContractAddress,factoryAddress)).returning();
         console.log(deleteExchange)
 
         return NextResponse.json({success:true,message:"Exchange deleted"})

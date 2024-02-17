@@ -74,7 +74,7 @@ export function AddExchangeForm({default_value,className}:{default_value?:Type_S
     console.log("add exchange function")
     try{
       setLoading(true)
-    const apiCall=await fetch(baseURL+"/api/exchanges",{method:"POST",cache:"no-cache",body:JSON.stringify(body)});
+    const apiCall=await fetch(baseURL+"/api/exchanges",{method:default_value?"PUT":"POST",cache:"no-cache",body:JSON.stringify(body)});
     const resultData=await apiCall.json()
     if(apiCall.ok){
       toast({title:"Success",description:resultData.message})
@@ -95,7 +95,7 @@ export function AddExchangeForm({default_value,className}:{default_value?:Type_S
 
   return(
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(addExchange)} className={"h-auto grid grid-cols-1 gap-5 space-y-3 bg-lime-egg/30 p-1 md:p-5 "+className}>
+      <form onSubmit={form.handleSubmit(addExchange)} className={" min-h-screen grid grid-cols-1 gap-5 space-y-3 bg-lime-egg/30 p-1 md:p-5 "+className}>
         
           <FormField control={form.control} name="name" render={({field})=>(
             <FormItem className=" self-end">

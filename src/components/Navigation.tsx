@@ -22,9 +22,8 @@ import * as React from "react"
 import { useToast } from "./ui/use-toast"
 
 export default function Navigation(){
-    const [open, setOpen] = React.useState(false)
-    const [update,setUpdate]=React.useState(false)
     const {toast}=useToast()
+    const router=useRouter()
 
     async function handleLogOut(){
         const logoutCall=await fetch(baseURL+"/api/logout",{method:"POST",cache:"no-cache"})
@@ -33,24 +32,15 @@ export default function Navigation(){
         }else{
             toast({title:"Failure",description:"please try again"})
         }
+
+        router.refresh()
     }
 
-    const router=useRouter()
     return(
-        <nav className="flex justify-end text-lime-egg items-center bg-primary min-h-[60px] px-[10px]">
-            <DropdownMenu open={open} onOpenChange={setOpen}>
-                <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm">
-                    Account
-                </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-[200px]">
-                <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={()=>setUpdate(true)} >Logout</DropdownMenuItem>            
-                    
-                </DropdownMenuGroup>
-                </DropdownMenuContent>
-            </DropdownMenu>
+        <nav className="flex justify-end text-white items-center bg-white min-h-[70px] px-[10px]">
+            <button onClick={handleLogOut} className=" bg-button p-3 min-w-[100px]">
+                Logout
+            </button>
         </nav>
     )
 }
